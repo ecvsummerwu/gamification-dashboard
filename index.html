@@ -72,7 +72,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .lb-pt{font-size:13px;font-weight:500;color:var(--text-accent);text-align:right}
 .pie-wrap{background:var(--surface-0);border-radius:12px;padding:1rem;text-align:center}
 .pie-title{font-size:13px;font-weight:500;color:var(--text-primary);margin-bottom:12px}
-.pie-canvas{width:180px!important;height:180px!important}
+.pie-canvas{width:100%!important;height:200px!important}
 .pie-legend{margin-top:12px;text-align:left}
 .pie-legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-secondary);margin-bottom:4px}
 .pie-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
@@ -176,8 +176,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
     <div class="pie-wrap">
       <div class="pie-title">各 Region 證照數</div>
-      <canvas id="pie-chart" class="pie-canvas"></canvas>
-      <div class="pie-legend" id="pie-legend"></div>
+      <canvas id="region-chart" class="pie-canvas"></canvas>
+
     </div>
   </div>
 </div>
@@ -307,18 +307,14 @@ function renderPie(users){
   const colors=labels.map((_,i)=>PIE_COLORS[i%PIE_COLORS.length]);
 
   if(pieChart){pieChart.destroy();}
-  const ctx=document.getElementById('pie-chart').getContext('2d');
+  const ctx=document.getElementById('region-chart').getContext('2d');
   pieChart=new Chart(ctx,{
-    type:'doughnut',
-    data:{labels,datasets:[{data:values,backgroundColor:colors,borderWidth:2,borderColor:'#fff'}]},
-    options:{responsive:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.raw} 張`}}}}
+    type:'bar',
+    data:{labels,datasets:[{data:values,backgroundColor:colors,borderWidth:0,borderRadius:4,label:'證照數'}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.raw} 張`}}},scales:{x:{ticks:{stepSize:1},grid:{display:false}},y:{grid:{display:false}}}}
   });
 
-  document.getElementById('pie-legend').innerHTML=labels.map((l,i)=>`
-    <div class="pie-legend-item">
-      <div class="pie-dot" style="background:${colors[i]}"></div>
-      <span>${l} — ${regionMap[l]} 張</span>
-    </div>`).join('');
+
 }
 
 function renderAll(data){
@@ -351,7 +347,7 @@ function renderAll(data){
     const used=winners.length,left=max-used,pct=Math.round(used/max*100);
     const bc=left===0?'full':left===1?'low':'',lc=left===0?'full':left===1?'low':'ok';
     const wHtml=winners.length?winners.map(w=>{const ok=(w.Status||w.status||'').includes('核准')||(w.Status||w.status||'').toLowerCase().includes('approved');return`<div class="wr"><div class="wr-nm">${w.EmployeeName||w.Title||'—'}</div><span class="wpill ${ok?'wok':'wpend'}">${ok?'核准':'待審核'}</span></div>`;}).join(''):'<div class="empty">尚未有申請者</div>';
-    return`<div class="sp-card"><div class="sp-head"><div><div class="sp-title">${icon} ${title}</div><div class="sp-usd">${usd}</div></div><div class="qleft ${lc}">${left===0?'額滿':left+' 名額剩'}</div></div><div class="sp-cond">${cond}</div><div class="quota-row"><div class="qbar-w"><div class="qbar ${bc}" style="width:${pct}%"></div></div><span style="font-size:12px;color:#888">${used}/${max}</span></div>${wHtml}</div>`;
+    return`<div class="sp-card"><div class="sp-head"><div><div class="sp-title">${icon} ${title}</div><div class="sp-usd">${usd}</div></div><div class="qleft ${lc}">${left===0?'額滿':'剩餘 '+left+' 名額'}</div></div><div class="sp-cond">${cond}</div><div class="quota-row"><div class="qbar-w"><div class="qbar ${bc}" style="width:${pct}%"></div></div><span style="font-size:12px;color:#888">${used}/${max}</span></div>${wHtml}</div>`;
   }
   document.getElementById('sp-grid').innerHTML=spCard('🌟','All-Star Award','USD 200','Foundational + Associate + Pro/Spec 各 1 張',3,'allstar')+spCard('🤖','AI-Enthusiast Award','USD 50','AI Practitioner + Generative AI Developer',5,'ai');
 }
