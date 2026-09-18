@@ -21,8 +21,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .topbar h2{font-size:20px;font-weight:500}.topbar p{font-size:13px;color:var(--text-secondary);margin-top:2px}
 .badge{font-size:12px;padding:3px 10px;border-radius:20px;font-weight:500;background:var(--bg-accent);color:var(--text-accent)}
 .ts{font-size:12px;color:var(--text-muted)}
-.btn{font-size:12px;padding:5px 12px;border-radius:var(--radius);border:0.5px solid var(--border-strong);background:var(--surface-2);color:var(--text-primary);cursor:pointer}
-.btn:hover{background:var(--surface-1)}
+.lang-switch{display:flex;gap:2px;background:var(--surface-1);border-radius:20px;padding:2px}
+.lang-btn{font-size:12px;padding:4px 12px;border-radius:18px;border:none;background:transparent;color:var(--text-secondary);cursor:pointer;font-family:inherit}
+.lang-btn.active{background:var(--surface-2);color:var(--text-accent);font-weight:500;box-shadow:0 1px 2px rgba(0,0,0,0.08)}
 .countdown{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:1rem}
 .cd-box{background:var(--surface-2);border-radius:var(--radius);padding:.7rem;text-align:center;border:0.5px solid var(--border)}
 .cd-num{font-size:26px;font-weight:500;color:var(--text-accent);line-height:1}
@@ -36,30 +37,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .form-icon{font-size:20px;min-width:24px}
 .form-label{font-size:13px;font-weight:500;color:var(--text-primary);line-height:1.3}
 .form-sub{font-size:11px;color:var(--text-muted);margin-top:2px}
-.vc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.vc{background:var(--surface-0);border-radius:var(--radius);padding:.9rem 1rem}
-.vc-level{font-size:12px;font-weight:500;color:var(--text-muted);margin-bottom:6px}
-.vc-num{font-size:28px;font-weight:500;line-height:1}
-.vc-num.ok{color:var(--text-success)}.vc-num.low{color:var(--text-warning)}.vc-num.empty{color:var(--text-danger)}
-.vc-sub{font-size:12px;color:var(--text-muted);margin-top:3px}
-.vc-bar-w{height:6px;background:rgba(0,0,0,0.08);border-radius:3px;overflow:hidden;margin-top:8px}
-.vc-bar{height:100%;border-radius:3px}
-.vc-bar.ok{background:var(--fill-success)}.vc-bar.low{background:var(--fill-warning)}.vc-bar.empty{background:var(--fill-danger)}
-.vc-edit{display:none;gap:6px;margin-top:8px;align-items:center}
-.vc-edit.show{display:flex}
-.vc-edit input{width:60px;font-size:13px;padding:3px 8px;border-radius:var(--radius);border:0.5px solid var(--border-strong);background:var(--surface-2)}
-.vc-edit button{font-size:12px;padding:3px 10px;border-radius:var(--radius);border:0.5px solid var(--border-strong);background:var(--surface-2);cursor:pointer}
-.edit-toggle{font-size:12px;color:var(--text-muted);cursor:pointer;border:none;background:none;padding:0}
 .fame-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
 .fame-card{background:var(--surface-0);border-radius:var(--radius);padding:.9rem 1rem;display:flex;align-items:center;gap:12px}
 .fame-avatar{width:40px;height:40px;border-radius:50%;background:var(--bg-accent);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:500;color:var(--text-accent);flex-shrink:0}
 .fame-name{font-size:13px;font-weight:500}.fame-cert{font-size:11px;color:var(--text-muted);margin-top:2px;line-height:1.4}
 .fame-pts{font-size:13px;font-weight:500;color:var(--text-accent);margin-top:4px}
 
-/* 積分榜 + pie chart 並排 */
-.lb-wrap{display:block}
-.lb-hd{display:grid;grid-template-columns:48px 1fr 60px 70px;gap:6px;padding:5px 8px;font-size:11px;color:var(--text-muted);font-weight:500}
-.lb-row{display:grid;grid-template-columns:48px 1fr 60px 70px;gap:6px;align-items:center;padding:8px;border-bottom:0.5px solid var(--border)}
+/* 積分榜 */
+.lb-hd{display:grid;grid-template-columns:48px 1fr 70px 70px;gap:6px;padding:5px 8px;font-size:11px;color:var(--text-muted);font-weight:500}
+.lb-row{display:grid;grid-template-columns:48px 1fr 70px 70px;gap:6px;align-items:center;padding:8px;border-bottom:0.5px solid var(--border)}
 .lb-row:last-child{border-bottom:none}
 .lb-row.r1{background:var(--bg-warning);border-radius:8px;border:none;margin-bottom:2px}
 .lb-row.r2,.lb-row.r3{background:var(--surface-0);border-radius:8px;border:none;margin-bottom:2px}
@@ -67,12 +53,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .lb-rk.g{color:var(--text-warning)}
 .lb-nm{font-size:13px;font-weight:500}.lb-rg{font-size:12px;color:var(--text-muted)}
 .lb-pt{font-size:13px;font-weight:500;color:var(--text-accent);text-align:right}
-
-.pie-title{font-size:13px;font-weight:500;color:var(--text-primary);margin-bottom:12px}
-
-.pie-legend{margin-top:12px;text-align:left}
-.pie-legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-secondary);margin-bottom:4px}
-.pie-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 
 .wall-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px}
 .wc{background:var(--surface-0);border-radius:var(--radius);padding:1rem}
@@ -105,19 +85,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .wr-nm{font-size:13px}.wpill{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500}
 .wok{background:var(--bg-success);color:var(--text-success)}.wpend{background:var(--bg-warning);color:var(--text-warning)}
 .empty{font-size:13px;color:var(--text-muted);padding:4px 0}
-@media(max-width:600px){.lb-wrap{grid-template-columns:1fr}}
-
-/* lang switcher */
-.lang-btn{font-size:12px;padding:4px 10px;border-radius:var(--radius);border:0.5px solid var(--border-strong);background:var(--surface-2);color:var(--text-primary);cursor:pointer;font-weight:500}
-.lang-btn.active{background:var(--fill-accent);color:#fff;border-color:var(--fill-accent)}
-/* password modal */
-.pw-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:999;display:flex;align-items:center;justify-content:center}
-.pw-box{background:#fff;border-radius:12px;padding:1.5rem 2rem;min-width:280px;text-align:center}
-.pw-box h3{font-size:16px;font-weight:500;margin-bottom:8px}
-.pw-box p{font-size:13px;color:var(--text-muted);margin-bottom:16px}
-.pw-input{width:100%;font-size:14px;padding:8px 12px;border-radius:var(--radius);border:0.5px solid var(--border-strong);margin-bottom:10px}
-.pw-submit{width:100%;font-size:14px;padding:8px;border-radius:var(--radius);border:none;background:var(--fill-accent);color:#fff;cursor:pointer;font-weight:500}
-.pw-err{font-size:12px;color:var(--text-danger);margin-top:6px;display:none}
 </style>
 </head>
 <body>
@@ -126,13 +93,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div class="topbar">
   <div>
     <h2>AWS Certification Gamification 2026 H2</h2>
-    <p>公開看板 · 賽季期間 2026/07/22 – 2026/12/31</p>
+    <p data-i18n="subtitle">公開看板 · 賽季期間 2026/07/22 – 2026/12/31</p>
   </div>
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-    <span class="badge">進行中</span>
-    <button class="lang-btn active" id="btn-zh" onclick="setLang('zh')">中文</button>
-    <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
-    <button class="btn" id="refresh-btn" onclick="loadData()"><i class="ti ti-refresh"></i> 更新資料</button>
+    <div class="lang-switch">
+      <button class="lang-btn active" id="lang-zh" onclick="setLang('zh')">中文</button>
+      <button class="lang-btn" id="lang-en" onclick="setLang('en')">EN</button>
+    </div>
+    <span class="badge" data-i18n="badge_active">進行中</span>
     <span class="ts" id="upd-ts">載入中...</span>
   </div>
 </div>
@@ -140,95 +108,74 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div class="countdown" id="cd"></div>
 
 <div class="sec">
-  <div class="sec-t"><div class="sec-t-left"><i class="ti ti-forms"></i> 表單快速入口</div></div>
+  <div class="sec-t"><div class="sec-t-left"><i class="ti ti-forms"></i> <span data-i18n="sec_forms">表單快速入口</span></div></div>
   <div class="forms-grid">
     <a class="form-btn" href="https://forms.office.com/Pages/ResponsePage.aspx?id=jEDbJMinOk-P-RCGCkjSNUtz_Cgo7rZMgPHJffim-ZpUNU5aTUFOUkNHWTBRV0FYNUcwVkFINDlXVyQlQCN0PWcu" target="_blank">
-      <span class="form-icon">📋</span><div><div class="form-label">Registration + Voucher</div><div class="form-sub">報名 & 申請考試券</div></div>
+      <span class="form-icon">📋</span><div><div class="form-label">Registration + Voucher</div><div class="form-sub" data-i18n="form1_sub">報名 & 申請考試券</div></div>
       <i class="ti ti-arrow-right" style="margin-left:auto;color:#888"></i>
     </a>
     <a class="form-btn" href="https://forms.office.com/Pages/ResponsePage.aspx?id=jEDbJMinOk-P-RCGCkjSNUtz_Cgo7rZMgPHJffim-ZpUMjdKTE4xM0FENUZGTFVSQ1ZTWlk1R1ZQSiQlQCN0PWcu" target="_blank">
-      <span class="form-icon">✅</span><div><div class="form-label">Certification Report</div><div class="form-sub">回報考試結果</div></div>
+      <span class="form-icon">✅</span><div><div class="form-label">Certification Report</div><div class="form-sub" data-i18n="form2_sub">回報考試結果</div></div>
       <i class="ti ti-arrow-right" style="margin-left:auto;color:#888"></i>
     </a>
     <a class="form-btn" href="https://forms.office.com/Pages/ResponsePage.aspx?id=jEDbJMinOk-P-RCGCkjSNUtz_Cgo7rZMgPHJffim-ZpUNUdUWTIzQUlSU0dERFBZR0pLNEYyRFg4OSQlQCN0PWcu" target="_blank">
-      <span class="form-icon">🏅</span><div><div class="form-label">Special Award Application</div><div class="form-sub">申請特殊獎項</div></div>
+      <span class="form-icon">🏅</span><div><div class="form-label">Special Award Application</div><div class="form-sub" data-i18n="form3_sub">申請特殊獎項</div></div>
       <i class="ti ti-arrow-right" style="margin-left:auto;color:#888"></i>
     </a>
     <a class="form-btn" href="https://forms.office.com/Pages/ResponsePage.aspx?id=jEDbJMinOk-P-RCGCkjSNUtz_Cgo7rZMgPHJffim-ZpUREpXMjk0S0o3VVZWTTNNR1hFMUhWT1NORyQlQCN0PWcu" target="_blank">
-      <span class="form-icon">📖</span><div><div class="form-label">Experience Sharing</div><div class="form-sub">分享備考心得</div></div>
+      <span class="form-icon">📖</span><div><div class="form-label">Experience Sharing</div><div class="form-sub" data-i18n="form4_sub">分享備考心得</div></div>
       <i class="ti ti-arrow-right" style="margin-left:auto;color:#888"></i>
     </a>
     <a class="form-btn" href="https://forms.office.com/Pages/ResponsePage.aspx?id=jEDbJMinOk-P-RCGCkjSNUtz_Cgo7rZMgPHJffim-ZpURjU4RUNMVVVDMTJGVTFCQ1ZCR0hQQlhBVyQlQCN0PWcu" target="_blank">
-      <span class="form-icon">🎓</span><div><div class="form-label">Microcredentials Report</div><div class="form-sub">回報完課紀錄</div></div>
+      <span class="form-icon">🎓</span><div><div class="form-label">Microcredentials Report</div><div class="form-sub" data-i18n="form5_sub">回報完課紀錄</div></div>
       <i class="ti ti-arrow-right" style="margin-left:auto;color:#888"></i>
     </a>
   </div>
 </div>
 
-<!-- password modal -->
-<div class="pw-overlay" id="pw-overlay" style="display:none">
-  <div class="pw-box">
-    <h3 id="pw-title">管理員驗證</h3>
-    <p id="pw-desc">請輸入管理員密碼以查看考試券狀態</p>
-    <input class="pw-input" type="password" id="pw-input" placeholder="密碼" onkeydown="if(event.key==='Enter')checkPw()">
-    <button class="pw-submit" onclick="checkPw()" id="pw-submit-btn">確認</button>
-    <div class="pw-err" id="pw-err">密碼錯誤，請重試</div>
+<div class="sec">
+  <div class="sec-t"><div class="sec-t-left"><i class="ti ti-trophy"></i> <span data-i18n="sec_fame">本月名人榜</span></div></div>
+  <div class="fame-grid" id="fame-list"><div class="empty" data-i18n="loading">載入中...</div></div>
+</div>
+
+<div class="sec">
+  <div class="sec-t"><div class="sec-t-left"><i class="ti ti-chart-bar"></i> <span data-i18n="sec_leaderboard">積分榜</span></div></div>
+  <div class="lb-hd">
+    <div data-i18n="lb_rank">名次</div>
+    <div data-i18n="lb_employee">員工</div>
+    <div data-i18n="lb_country">國家</div>
+    <div style="text-align:right" data-i18n="lb_points">積分</div>
   </div>
-</div>
-
-<div id="vc-section">
-<div class="sec">
-  <div class="sec-t">
-    <div class="sec-t-left"><i class="ti ti-ticket"></i> <span data-zh="剩餘考試券" data-en="Remaining Vouchers">剩餘考試券</span></div>
-    <button class="edit-toggle" onclick="requireAdminThenEdit()" id="edit-toggle-btn" data-zh="編輯數量" data-en="Edit">編輯數量</button>
-  </div>
-  <div class="vc-grid" id="vc-grid"></div>
-</div>
-</div>
-
+  <div id="lb-list"><div class="empty" data-i18n="loading">載入中...</div></div>
 </div>
 
 <div class="sec">
-  <div class="sec-t"><div class="sec-t-left"><i class="ti ti-trophy"></i> 本月名人榜</div></div>
-  <div class="fame-grid" id="fame-list"><div class="empty">載入中...</div></div>
+  <div class="sec-t"><div class="sec-t-left"><i class="ti ti-message-circle"></i> <span data-i18n="sec_wall">心得牆</span></div></div>
+  <div class="wall-grid" id="wall-list"><div class="empty" data-i18n="loading">載入中...</div></div>
 </div>
 
 <div class="sec">
-  <div class="sec-t"><div class="sec-t-left"><i class="ti ti-chart-bar"></i> 積分榜</div></div>
-  <div class="lb-wrap">
-    <div>
-      <div class="lb-hd"><div>名次</div><div>員工</div><div>國家</div><div style="text-align:right">積分</div></div>
-      <div id="lb-list"><div class="empty">載入中...</div></div>
-    </div></div>
-</div>
-
-<div class="sec">
-  <div class="sec-t"><div class="sec-t-left"><i class="ti ti-message-circle"></i> 心得牆</div></div>
-  <div class="wall-grid" id="wall-list"><div class="empty">載入中...</div></div>
-</div>
-
-<div class="sec">
-  <div class="sec-t"><div class="sec-t-left"><i class="ti ti-star"></i> Special Awards 剩餘名額</div></div>
+  <div class="sec-t"><div class="sec-t-left"><i class="ti ti-star"></i> <span data-i18n="sec_awards">Special Awards 剩餘名額</span></div></div>
   <div class="sp-grid" id="sp-grid"></div>
 </div>
 
 <div class="sec">
-  <div class="sec-t"><div class="sec-t-left"><i class="ti ti-books"></i> 相關資源</div></div>
+  <div class="sec-t"><div class="sec-t-left"><i class="ti ti-books"></i> <span data-i18n="sec_resources">相關資源</span></div></div>
   <div class="res-grid">
     <a class="res-btn" href="https://ecvcorp.sharepoint.com/:p:/r/sites/GMO/Shared%20Documents/11_AWS%20Program%20data%20pack/06_AWS%20Training/Gamify%20Program/Gamify%20Program%20%E4%BF%A1%E4%BB%B6%E5%85%AC%E5%91%8A%20%E9%99%84%E4%BB%B6deck/AWS_Cert_Gamification_2026_EN.pptx?d=w411646df56194d73a9a563c893b9c1ca&csf=1&web=1&e=14SaZi" target="_blank">
-      <span class="form-icon">📊</span><div><div class="res-label">Program Deck (EN)</div><div class="res-sub">計畫說明 — 英文版</div></div>
+      <span class="form-icon">📊</span><div><div class="res-label" data-i18n="res1_label">Program Deck (EN)</div><div class="res-sub" data-i18n="res1_sub">計畫說明 — 英文版</div></div>
       <i class="ti ti-arrow-right" style="margin-left:auto;color:#888"></i>
     </a>
     <a class="res-btn" href="https://ecvcorp.sharepoint.com/:p:/r/sites/GMO/Shared%20Documents/11_AWS%20Program%20data%20pack/06_AWS%20Training/Gamify%20Program/Gamify%20Program%20%E4%BF%A1%E4%BB%B6%E5%85%AC%E5%91%8A%20%E9%99%84%E4%BB%B6deck/%E4%BF%A1%E4%BB%B6%E5%85%AC%E5%91%8A%20_AWS_Cert_Gamification_2026_CN.pptx?d=w1f0af246b8df4d65a3c71aa2548b4b71&csf=1&web=1&e=VTcIUg" target="_blank">
-      <span class="form-icon">📊</span><div><div class="res-label">計畫 Deck（中文）</div><div class="res-sub">計畫說明 — 中文版</div></div>
+      <span class="form-icon">📊</span><div><div class="res-label" data-i18n="res2_label">計畫 Deck（中文）</div><div class="res-sub" data-i18n="res2_sub">計畫說明 — 中文版</div></div>
       <i class="ti ti-arrow-right" style="margin-left:auto;color:#888"></i>
     </a>
     <a class="res-btn" href="https://ecvcorp.sharepoint.com/:p:/r/sites/GMO/_layouts/15/Doc.aspx?sourcedoc=%7B9F3ADE9C-BD25-46CE-92A9-52C3E955E5FD%7D&file=Where%20to%20download%20your%20certification.pptx&action=edit&mobileredirect=true" target="_blank">
-      <span class="form-icon">🎓</span><div><div class="res-label">如何下載證照</div><div class="res-sub">Where to download your certification</div></div>
+      <span class="form-icon">🎓</span><div><div class="res-label" data-i18n="res3_label">如何下載證照</div><div class="res-sub" data-i18n="res3_sub">Where to download your certification</div></div>
       <i class="ti ti-arrow-right" style="margin-left:auto;color:#888"></i>
     </a>
     <a class="res-btn" href="https://ecvcorp.sharepoint.com/:p:/r/sites/GMO/Shared%20Documents/11_AWS%20Program%20data%20pack/06_AWS%20Training/03.%20Training%20Deck/%5BExternal%5D%20T%26C%20for%20sales%20training.pptx?d=w37b28cd1cf444d6a9bad200b81f3c408&csf=1&web=1&e=9mJgLf" target="_blank">
-      <span class="form-icon">📚</span><div><div class="res-label">T&C for Sales Training</div><div class="res-sub">相關訓練平台資源</div></div>
+      <span class="form-icon">📚</span><div><div class="res-label">T&C for Sales Training</div><div class="res-sub" data-i18n="res4_sub">相關訓練平台資源</div></div>
       <i class="ti ti-arrow-right" style="margin-left:auto;color:#888"></i>
     </a>
   </div>
@@ -239,33 +186,111 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 const GITHUB_URL='https://raw.githubusercontent.com/ecvsummerwu/gamification-dashboard/main/gamification_data.json';
 const END=new Date('2026-12-31T23:59:59');
 
+/* ---------- i18n ---------- */
+let LANG='zh';
+let LAST_DATA=null;
+const I18N={
+  zh:{
+    subtitle:'公開看板 · 賽季期間 2026/07/22 – 2026/12/31',
+    badge_active:'進行中',
+    updated_prefix:'更新: ',
+    loading:'載入中...',
+    load_failed:'載入失敗，稍後將自動重試',
+    season_ended:'賽季已結束',
+    cd_day:'天',cd_hour:'時',cd_min:'分',cd_sec:'秒',
+    cd_label:l=>`距賽季結束剩 ${l}`,
+    sec_forms:'表單快速入口',
+    sec_fame:'本月名人榜',
+    sec_leaderboard:'積分榜',
+    sec_wall:'心得牆',
+    sec_awards:'Special Awards 剩餘名額',
+    sec_resources:'相關資源',
+    lb_rank:'名次',lb_employee:'員工',lb_country:'國家',lb_points:'積分',
+    form1_sub:'報名 & 申請考試券',
+    form2_sub:'回報考試結果',
+    form3_sub:'申請特殊獎項',
+    form4_sub:'分享備考心得',
+    form5_sub:'回報完課紀錄',
+    res1_label:'Program Deck (EN)',res1_sub:'計畫說明 — 英文版',
+    res2_label:'計畫 Deck（中文）',res2_sub:'計畫說明 — 中文版',
+    res3_label:'如何下載證照',res3_sub:'下載已取得的 AWS 認證證書',
+    res4_sub:'相關訓練平台資源',
+    empty_fame:'本月尚無新增證照',
+    empty_lb:'尚未有資料',
+    empty_wall:'尚未有心得分享',
+    empty_award:'尚未有申請者',
+    award_full:'額滿',
+    award_left:n=>`剩餘 ${n} 名額`,
+    award_approved:'核准',
+    award_pending:'待審核',
+    wc_res_label:name=>`${name} 覺得幫助最大的資源`,
+  },
+  en:{
+    subtitle:'Public Dashboard · Season 2026/07/22 – 2026/12/31',
+    badge_active:'Active',
+    updated_prefix:'Updated: ',
+    loading:'Loading...',
+    load_failed:'Failed to load, will retry automatically',
+    season_ended:'Season Ended',
+    cd_day:'Days',cd_hour:'Hours',cd_min:'Min',cd_sec:'Sec',
+    cd_label:l=>`${l} left`,
+    sec_forms:'Quick Links — Forms',
+    sec_fame:"This Month's Hall of Fame",
+    sec_leaderboard:'Leaderboard',
+    sec_wall:'Experience Wall',
+    sec_awards:'Special Awards — Remaining Slots',
+    sec_resources:'Related Resources',
+    lb_rank:'Rank',lb_employee:'Employee',lb_country:'Country',lb_points:'Points',
+    form1_sub:'Registration & Voucher Request',
+    form2_sub:'Report Certification Result',
+    form3_sub:'Apply for Special Award',
+    form4_sub:'Share Your Experience',
+    form5_sub:'Report Microcredential Completion',
+    res1_label:'Program Deck (EN)',res1_sub:'Program overview — English version',
+    res2_label:'Program Deck (CN)',res2_sub:'Program overview — Chinese version',
+    res3_label:'How to Download Your Certificate',res3_sub:'Where to download your AWS certification',
+    res4_sub:'Related training platform resources',
+    empty_fame:'No new certifications this month',
+    empty_lb:'No data yet',
+    empty_wall:'No experience shared yet',
+    empty_award:'No applicants yet',
+    award_full:'Full',
+    award_left:n=>`${n} slots left`,
+    award_approved:'Approved',
+    award_pending:'Pending',
+    wc_res_label:name=>`${name}'s top resource`,
+  }
+};
+function t(key,param){
+  const v=I18N[LANG][key];
+  return typeof v==='function'?v(param):v;
+}
+function applyStaticI18N(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const v=t(el.getAttribute('data-i18n'));
+    if(typeof v==='string')el.textContent=v;
+  });
+}
+function setLang(lang){
+  LANG=lang;
+  document.documentElement.lang=lang==='zh'?'zh-TW':'en';
+  document.getElementById('lang-zh').classList.toggle('active',lang==='zh');
+  document.getElementById('lang-en').classList.toggle('active',lang==='en');
+  applyStaticI18N();
+  updateCD();
+  if(LAST_DATA)renderAll(LAST_DATA);
+}
+
+/* ---------- countdown ---------- */
 function updateCD(){
   const now=new Date(),diff=END-now;
-  if(diff<=0){document.getElementById('cd').innerHTML='<div class="cd-box"><div class="cd-num">0</div><div class="cd-lbl">賽季已結束</div></div>';return;}
+  if(diff<=0){document.getElementById('cd').innerHTML=`<div class="cd-box"><div class="cd-num">0</div><div class="cd-lbl">${t('season_ended')}</div></div>`;return;}
   const d=Math.floor(diff/864e5),h=Math.floor((diff%864e5)/36e5),m=Math.floor((diff%36e5)/6e4),s=Math.floor((diff%6e4)/1e3);
-  document.getElementById('cd').innerHTML=[['天',d],['時',h],['分',m],['秒',s]].map(([l,v])=>`<div class="cd-box"><div class="cd-num">${v}</div><div class="cd-lbl">${l}</div></div>`).join('');
+  document.getElementById('cd').innerHTML=[[t('cd_day'),d],[t('cd_hour'),h],[t('cd_min'),m],[t('cd_sec'),s]].map(([l,v])=>`<div class="cd-box"><div class="cd-num">${v}</div><div class="cd-lbl">${t('cd_label',l)}</div></div>`).join('');
 }
 updateCD();setInterval(updateCD,1000);
 
-// countdown handled by updateCDLocalized
-
-const VOUCHERS=[
-  {level:'Foundational',total:15,remaining:0},
-  {level:'Associate',total:50,remaining:44},
-  {level:'Professional / Specialty',total:23,remaining:3},
-];
-let editMode=false;
-
-function vcColor(r,t){if(r===0)return'empty';return r/t<=0.2?'low':'ok';}
-function renderVouchers(){
-  document.getElementById('vc-grid').innerHTML=VOUCHERS.map((v,i)=>{
-    const c=vcColor(v.remaining,v.total),pct=Math.round(v.remaining/v.total*100);
-    return`<div class="vc"><div class="vc-level">${v.level}</div><div class="vc-num ${c}">${v.remaining}</div><div class="vc-sub">${v.remaining===0?'已發完':v.remaining+' 張剩餘'} / 共 ${v.total} 張</div><div class="vc-bar-w"><div class="vc-bar ${c}" style="width:${pct}%"></div></div><div class="vc-edit${editMode?' show':''}" id="vc-edit-${i}"><input type="number" min="0" max="${v.total}" value="${v.remaining}" id="vc-inp-${i}"><button onclick="saveVoucher(${i})">更新</button></div></div>`;
-  }).join('');
-}
-function toggleEdit(){editMode=!editMode;document.getElementById('edit-toggle-btn').textContent=editMode?'完成':'編輯數量';renderVouchers();}
-function saveVoucher(i){const val=parseInt(document.getElementById('vc-inp-'+i).value,10);if(isNaN(val)||val<0||val>VOUCHERS[i].total)return;VOUCHERS[i].remaining=val;renderVouchers();}
-
+/* ---------- helpers ---------- */
 function norm(e){return(e||'').toLowerCase().trim();}
 function getInitials(name){
   const parts=(name||'').trim().split(/\s+/);
@@ -315,173 +340,53 @@ function buildUsers(data){
   return users;
 }
 
-// ── i18n ──
-const LANG = {
-  zh: {
-    title: 'AWS Certification Gamification 2026 H2',
-    subtitle: '公開看板 · 賽季期間 2026/07/22 – 2026/12/31',
-    refresh: '更新資料',
-    active: '進行中',
-    formTitle: '表單快速入口',
-    vcTitle: '剩餘考試券',
-    vcLock: '考試券資訊（管理員專用，點此解鎖）',
-    editBtn: '編輯數量',
-    editDone: '完成',
-    fameTitle: '本月名人榜',
-    fameEmpty: '本月尚無新增證照',
-    lbTitle: '積分榜',
-    lbRank: '名次', lbName: '員工', lbRegion: '國家', lbProg: '進度', lbPts: '積分',
-    lbEmpty: '尚未有資料',
-    pieTitle: '各 Region 證照數',
-    wallTitle: '心得牆',
-    wallEmpty: '尚未有心得分享',
-    wallRes: (name) => `${name} 覺得幫助最大的資源`,
-    spTitle: 'Special Awards 剩餘名額',
-    spEmpty: '尚未有申請者',
-    spFull: '額滿', spLeft: (n) => `剩餘 ${n} 名額`,
-    spApproved: '核准', spPending: '待審核',
-    resTitle: '相關資源',
-    loading: '載入中...',
-    loadFail: '載入失敗，請點更新重試',
-    updated: (t) => `更新: ${t}`,
-    updating: '更新中...',
-    cdLabels: ['天','時','分','秒'],
-    cdPrefix: '距賽季結束剩 ',
-    pwTitle: '管理員驗證',
-    pwDesc: '請輸入管理員密碼以查看考試券狀態',
-    pwSubmit: '確認',
-    pwErr: '密碼錯誤，請重試',
-    vcSuffix: ' 張剩餘',
-    vcEmpty: '已發完',
-    vcTotal: ' / 共 ',
-    vcUnit: ' 張',
-  },
-  en: {
-    title: 'AWS Certification Gamification 2026 H2',
-    subtitle: 'Public Dashboard · Season 2026/07/22 – 2026/12/31',
-    refresh: 'Refresh',
-    active: 'Active',
-    formTitle: 'Quick Links',
-    vcTitle: 'Remaining Vouchers',
-    vcLock: 'Voucher Info (Admin only — click to unlock)',
-    editBtn: 'Edit',
-    editDone: 'Done',
-    fameTitle: "This Month's Stars",
-    fameEmpty: 'No new certs this month',
-    lbTitle: 'Leaderboard',
-    lbRank: 'Rank', lbName: 'Name', lbRegion: 'Region', lbProg: 'Progress', lbPts: 'Pts',
-    lbEmpty: 'No data yet',
-    pieTitle: 'Certs by Region',
-    wallTitle: 'Experience Wall',
-    wallEmpty: 'No experience shared yet',
-    wallRes: (name) => `${name}'s most helpful resource`,
-    spTitle: 'Special Awards — Remaining Slots',
-    spEmpty: 'No applicants yet',
-    spFull: 'Full', spLeft: (n) => `${n} slot${n>1?'s':''} left`,
-    spApproved: 'Approved', spPending: 'Pending',
-    resTitle: 'Resources',
-    loading: 'Loading...',
-    loadFail: 'Load failed, please retry',
-    updated: (t) => `Updated: ${t}`,
-    updating: 'Updating...',
-    cdLabels: ['Days','Hrs','Min','Sec'],
-    cdPrefix: '',
-    pwTitle: 'Admin Verification',
-    pwDesc: 'Enter the admin password to view voucher status',
-    pwSubmit: 'Confirm',
-    pwErr: 'Wrong password, please try again',
-    vcSuffix: ' remaining',
-    vcEmpty: 'All issued',
-    vcTotal: ' / ',
-    vcUnit: ' total',
+function renderAll(data){
+  LAST_DATA=data;
+  const users=buildUsers(data);
+  const sorted=Object.values(users).sort((a,b)=>b.pts-a.pts);
+  const medals=['🥇','🥈','🥉'];
+
+  const fameItems=[];
+  Object.values(users).forEach(u=>{u.certs.forEach(c=>{if(thisMonth(c.date))fameItems.push({name:u.name,region:u.region,cert:c.cert,pts:c.pts});});});
+  const fameEl=document.getElementById('fame-list');
+  fameEl.innerHTML=fameItems.length?fameItems.map(f=>`<div class="fame-card"><div class="fame-avatar">${getInitials(f.name)}</div><div><div class="fame-name">${f.name}</div><div class="fame-cert">${f.cert}</div><div class="fame-pts">+${f.pts} pts</div></div></div>`).join(''):`<div class="empty">${t('empty_fame')}</div>`;
+
+  let rank=1;
+  document.getElementById('lb-list').innerHTML=sorted.slice(0,10).map((u,i)=>{
+    if(i>0&&sorted[i-1].pts!==u.pts)rank=i+1;
+    const cls=rank===1?'r1':rank===2?'r2':rank===3?'r3':'';
+    const rkLabel=rank<=3?medals[rank-1]:rank,rkCls=rank<=3?'g':'';
+    return`<div class="lb-row ${cls}"><div class="lb-rk ${rkCls}">${rkLabel}</div><div><div class="lb-nm">${u.name}</div></div><div class="lb-rg">${u.region||'—'}</div><div class="lb-pt">${u.pts}</div></div>`;
+  }).join('')||`<div class="empty">${t('empty_lb')}</div>`;
+
+  const entries=Object.values(users).filter(u=>u.expStory);
+  document.getElementById('wall-list').innerHTML=entries.length?entries.map(u=>`<div class="wc"><div class="wc-top"><div><div class="wc-nm">${u.name}</div><div class="wc-rg">${u.region||'—'}</div></div><div class="wc-ct">${u.expCert||'—'}</div></div><div class="wc-body">${u.expStory}</div>${u.expRes?`<div class="wc-res"><div class="wc-res-label">${t('wc_res_label',u.name)}</div>${u.expRes}</div>`:''}</div>`).join(''):`<div class="empty">${t('empty_wall')}</div>`;
+
+  const awards=data.special_awards||[];
+  function spCard(icon,title,usd,cond,max,type){
+    const winners=awards.filter(r=>{const tp=(r.AwardType||r.awardtype||'').toLowerCase();return type==='allstar'?(tp.includes('all')||tp.includes('全')):(tp.includes('ai')||tp.includes('enthusiast'));});
+    const used=winners.length,left=max-used,pct=Math.round(used/max*100);
+    const bc=left===0?'full':left===1?'low':'',lc=left===0?'full':left===1?'low':'ok';
+    const wHtml=winners.length?winners.map(w=>{const ok=(w.Status||w.status||'').includes('核准')||(w.Status||w.status||'').toLowerCase().includes('approved');return`<div class="wr"><div class="wr-nm">${w.EmployeeName||w.Title||'—'}</div><span class="wpill ${ok?'wok':'wpend'}">${ok?t('award_approved'):t('award_pending')}</span></div>`;}).join(''):`<div class="empty">${t('empty_award')}</div>`;
+    return`<div class="sp-card"><div class="sp-head"><div><div class="sp-title">${icon} ${title}</div><div class="sp-usd">${usd}</div></div><div class="qleft ${lc}">${left===0?t('award_full'):t('award_left',left)}</div></div><div class="sp-cond">${cond}</div><div class="quota-row"><div class="qbar-w"><div class="qbar ${bc}" style="width:${pct}%"></div></div><span style="font-size:12px;color:#888">${used}/${max}</span></div>${wHtml}</div>`;
   }
-};
-
-let currentLang = 'zh';
-
-function setLang(lang){
-  currentLang = lang;
-  document.getElementById('btn-zh').classList.toggle('active', lang==='zh');
-  document.getElementById('btn-en').classList.toggle('active', lang==='en');
-  applyLang();
-  if(lastData) renderAll(lastData);
+  document.getElementById('sp-grid').innerHTML=spCard('🌟','All-Star Award','USD 200','Foundational + Associate + Pro/Spec 各 1 張',3,'allstar')+spCard('🤖','AI-Enthusiast Award','USD 50','AI Practitioner + Generative AI Developer',5,'ai');
 }
 
-function t(key, ...args){
-  const val = LANG[currentLang][key];
-  return typeof val === 'function' ? val(...args) : val;
-}
-
-function applyLang(){
-  const L = LANG[currentLang];
-  document.querySelector('.topbar h2').textContent = L.title;
-  document.querySelector('.topbar p').textContent = L.subtitle;
-  document.getElementById('refresh-btn').innerHTML = `<i class="ti ti-refresh"></i> ${L.refresh}`;
-  document.querySelector('.badge').textContent = L.active;
-  document.getElementById('pw-title').textContent = L.pwTitle;
-  document.getElementById('pw-desc').textContent = L.pwDesc;
-  document.getElementById('pw-submit-btn').textContent = L.pwSubmit;
-  document.getElementById('pw-err').textContent = L.pwErr;
-  document.getElementById('vc-lock-text').textContent = L.vcLock;
-  if(document.getElementById('edit-toggle-btn'))
-    document.getElementById('edit-toggle-btn').textContent = editMode ? L.editDone : L.editBtn;
-  renderVouchers();
-}
-
-function renderVouchersLocalized(){
-  const L = LANG[currentLang];
-  document.getElementById('vc-grid').innerHTML = VOUCHERS.map((v,i)=>{
-    const c=vcColor(v.remaining,v.total), pct=Math.round(v.remaining/v.total*100);
-    const label = v.remaining===0 ? L.vcEmpty : v.remaining + L.vcSuffix;
-    const total = L.vcTotal + v.total + L.vcUnit;
-    return`<div class="vc"><div class="vc-level">${v.level}</div><div class="vc-num ${c}">${v.remaining}</div><div class="vc-sub">${label}${total}</div><div class="vc-bar-w"><div class="vc-bar ${c}" style="width:${pct}%"></div></div><div class="vc-edit${editMode?' show':''}" id="vc-edit-${i}"><input type="number" min="0" max="${v.total}" value="${v.remaining}" id="vc-inp-${i}"><button onclick="saveVoucher(${i})">${L.editDone}</button></div></div>`;
-  }).join('');
-}
-
-// Override renderVouchers
-const _origRenderVouchers = renderVouchers;
-window.renderVouchers = renderVouchersLocalized;
-
-// Password
-const ADMIN_PW = 'awsbu2026';
-let adminUnlocked = false;
-
-function requireAdminThenEdit(){
-  if(adminUnlocked){ toggleEdit(); return; }
-  document.getElementById('pw-overlay').style.display='flex';
-  window._pwCallback = ()=>{ toggleEdit(); };
-}
-
-function checkPw(){
-  const val = document.getElementById('pw-input').value;
-  if(val === ADMIN_PW){
-    adminUnlocked = true;
-    document.getElementById('pw-overlay').style.display='none';
-    renderVouchers();
-    if(window._pwCallback){ window._pwCallback(); window._pwCallback=null; }
-  } else {
-    document.getElementById('pw-err').style.display='block';
-    document.getElementById('pw-input').value='';
+async function loadData(){
+  document.getElementById('upd-ts').textContent=t('loading');
+  try{
+    const res=await fetch(GITHUB_URL+'?t='+Date.now());
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    const data=await res.json();
+    renderAll(data);
+    document.getElementById('upd-ts').textContent=t('updated_prefix')+new Date().toLocaleDateString(LANG==='zh'?'zh-TW':'en-US')+' '+new Date().toLocaleTimeString(LANG==='zh'?'zh-TW':'en-US',{hour:'2-digit',minute:'2-digit'});
+  }catch(e){
+    document.getElementById('upd-ts').textContent=t('load_failed');
+    document.getElementById('lb-list').innerHTML=`<div class="empty">${t('load_failed')}</div>`;
   }
 }
 
-let lastData = null;
-const _origRenderAll = renderAll;
-window.renderAll = function(data){
-  lastData = data;
-  _origRenderAll(data);
-};
-
-function updateCD(){
-  const now=new Date(),diff=END-now;
-  const L=LANG[currentLang];
-  if(diff<=0){document.getElementById('cd').innerHTML=`<div class="cd-box"><div class="cd-num">0</div><div class="cd-lbl">${L.cdLabels[0]}</div></div>`;return;}
-  const vals=[Math.floor(diff/864e5),Math.floor((diff%864e5)/36e5),Math.floor((diff%36e5)/6e4),Math.floor((diff%6e4)/1e3)];
-  document.getElementById('cd').innerHTML=vals.map((v,i)=>`<div class="cd-box"><div class="cd-num">${v}</div><div class="cd-lbl">${L.cdPrefix}${L.cdLabels[i]}</div></div>`).join('');
-}
-updateCD();setInterval(updateCD,1000);
-
-renderVouchers();
 loadData();
 </script>
 </body>
