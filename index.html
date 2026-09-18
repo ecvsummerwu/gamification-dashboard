@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AWS Certification Gamification 2026 H2</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.7.0/tabler-icons.min.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -58,21 +57,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .fame-pts{font-size:13px;font-weight:500;color:var(--text-accent);margin-top:4px}
 
 /* 積分榜 + pie chart 並排 */
-.lb-wrap{display:grid;grid-template-columns:1fr 220px;gap:16px;align-items:start}
-.lb-hd{display:grid;grid-template-columns:48px 1fr 60px 80px 70px;gap:6px;padding:5px 8px;font-size:11px;color:var(--text-muted);font-weight:500}
-.lb-row{display:grid;grid-template-columns:48px 1fr 60px 80px 70px;gap:6px;align-items:center;padding:8px;border-bottom:0.5px solid var(--border)}
+.lb-wrap{display:block}
+.lb-hd{display:grid;grid-template-columns:48px 1fr 60px 70px;gap:6px;padding:5px 8px;font-size:11px;color:var(--text-muted);font-weight:500}
+.lb-row{display:grid;grid-template-columns:48px 1fr 60px 70px;gap:6px;align-items:center;padding:8px;border-bottom:0.5px solid var(--border)}
 .lb-row:last-child{border-bottom:none}
 .lb-row.r1{background:var(--bg-warning);border-radius:8px;border:none;margin-bottom:2px}
 .lb-row.r2,.lb-row.r3{background:var(--surface-0);border-radius:8px;border:none;margin-bottom:2px}
 .lb-rk{font-size:13px;text-align:center;color:var(--text-muted);font-weight:500}
 .lb-rk.g{color:var(--text-warning)}
 .lb-nm{font-size:13px;font-weight:500}.lb-rg{font-size:12px;color:var(--text-muted)}
-.bar-w{height:5px;background:rgba(0,0,0,0.08);border-radius:3px;overflow:hidden}
-.bar-f{height:100%;border-radius:3px;background:var(--fill-accent)}
 .lb-pt{font-size:13px;font-weight:500;color:var(--text-accent);text-align:right}
-.pie-wrap{background:var(--surface-0);border-radius:12px;padding:1rem;text-align:center}
+
 .pie-title{font-size:13px;font-weight:500;color:var(--text-primary);margin-bottom:12px}
-.pie-canvas{width:100%!important;height:200px!important}
+
 .pie-legend{margin-top:12px;text-align:left}
 .pie-legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-secondary);margin-bottom:4px}
 .pie-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
@@ -108,7 +105,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .wr-nm{font-size:13px}.wpill{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500}
 .wok{background:var(--bg-success);color:var(--text-success)}.wpend{background:var(--bg-warning);color:var(--text-warning)}
 .empty{font-size:13px;color:var(--text-muted);padding:4px 0}
-@media(max-width:600px){.lb-wrap{grid-template-columns:1fr}.pie-wrap{display:none}}
+@media(max-width:600px){.lb-wrap{grid-template-columns:1fr}}
 
 /* lang switcher */
 .lang-btn{font-size:12px;padding:4px 10px;border-radius:var(--radius);border:0.5px solid var(--border-strong);background:var(--surface-2);color:var(--text-primary);cursor:pointer;font-weight:500}
@@ -121,7 +118,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .pw-input{width:100%;font-size:14px;padding:8px 12px;border-radius:var(--radius);border:0.5px solid var(--border-strong);margin-bottom:10px}
 .pw-submit{width:100%;font-size:14px;padding:8px;border-radius:var(--radius);border:none;background:var(--fill-accent);color:#fff;cursor:pointer;font-weight:500}
 .pw-err{font-size:12px;color:var(--text-danger);margin-top:6px;display:none}
-.admin-only{display:none}
 </style>
 </head>
 <body>
@@ -180,21 +176,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 </div>
 
-<div class="admin-only" id="vc-section">
+<div id="vc-section">
 <div class="sec">
   <div class="sec-t">
     <div class="sec-t-left"><i class="ti ti-ticket"></i> <span data-zh="剩餘考試券" data-en="Remaining Vouchers">剩餘考試券</span></div>
-    <button class="edit-toggle" onclick="toggleEdit()" id="edit-toggle-btn" data-zh="編輯數量" data-en="Edit">編輯數量</button>
+    <button class="edit-toggle" onclick="requireAdminThenEdit()" id="edit-toggle-btn" data-zh="編輯數量" data-en="Edit">編輯數量</button>
   </div>
   <div class="vc-grid" id="vc-grid"></div>
 </div>
 </div>
 
-<div class="sec" id="vc-locked" style="cursor:pointer" onclick="document.getElementById('pw-overlay').style.display='flex'">
-  <div style="display:flex;align-items:center;gap:10px;color:var(--text-muted)">
-    <i class="ti ti-lock" style="font-size:18px"></i>
-    <span id="vc-lock-text" data-zh="考試券資訊（管理員專用，點此解鎖）" data-en="Voucher Info (Admin only — click to unlock)">考試券資訊（管理員專用，點此解鎖）</span>
-  </div>
 </div>
 
 <div class="sec">
@@ -206,15 +197,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="sec-t"><div class="sec-t-left"><i class="ti ti-chart-bar"></i> 積分榜</div></div>
   <div class="lb-wrap">
     <div>
-      <div class="lb-hd"><div>名次</div><div>員工</div><div>國家</div><div>進度</div><div style="text-align:right">積分</div></div>
+      <div class="lb-hd"><div>名次</div><div>員工</div><div>國家</div><div style="text-align:right">積分</div></div>
       <div id="lb-list"><div class="empty">載入中...</div></div>
-    </div>
-    <div class="pie-wrap">
-      <div class="pie-title">各 Region 證照數</div>
-      <canvas id="region-chart" class="pie-canvas"></canvas>
-
-    </div>
-  </div>
+    </div></div>
 </div>
 
 <div class="sec">
@@ -253,7 +238,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <script>
 const GITHUB_URL='https://raw.githubusercontent.com/ecvsummerwu/gamification-dashboard/main/gamification_data.json';
 const END=new Date('2026-12-31T23:59:59');
-const PIE_COLORS=['#378add','#639922','#ba7517','#e24b4a','#7c3aed','#0891b2','#c09000'];
 
 function updateCD(){
   const now=new Date(),diff=END-now;
@@ -269,7 +253,6 @@ const VOUCHERS=[
   {level:'Professional / Specialty',total:23,remaining:3},
 ];
 let editMode=false;
-let pieChart=null;
 
 function vcColor(r,t){if(r===0)return'empty';return r/t<=0.2?'low':'ok';}
 function renderVouchers(){
@@ -330,241 +313,7 @@ function buildUsers(data){
   return users;
 }
 
-function renderPie(users){
-  const regionMap={};
-  Object.values(users).forEach(u=>{
-    const r=u.region||'Other';
-    if(!regionMap[r])regionMap[r]=0;
-    regionMap[r]+=u.certs.length;
-  });
-  const labels=Object.keys(regionMap).sort();
-  const values=labels.map(l=>regionMap[l]);
-  const colors=labels.map((_,i)=>PIE_COLORS[i%PIE_COLORS.length]);
-
-  if(pieChart){pieChart.destroy();}
-  const ctx=document.getElementById('region-chart').getContext('2d');
-  pieChart=new Chart(ctx,{
-    type:'bar',
-    data:{labels,datasets:[{data:values,backgroundColor:colors,borderWidth:0,borderRadius:4,label:'證照數'}]},
-    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.raw} 張`}}},scales:{x:{ticks:{stepSize:1},grid:{display:false}},y:{grid:{display:false}}}}
-  });
-
-
-}
-
-function renderAll(data){
-  const users=buildUsers(data);
-  const sorted=Object.values(users).sort((a,b)=>b.pts-a.pts);
-  const top=sorted[0]?.pts||1;
-  const medals=['🥇','🥈','🥉'];
-
-  const fameItems=[];
-  Object.values(users).forEach(u=>{u.certs.forEach(c=>{if(thisMonth(c.date))fameItems.push({name:u.name,region:u.region,cert:c.cert,pts:c.pts});});});
-  const fameEl=document.getElementById('fame-list');
-  fameEl.innerHTML=fameItems.length?fameItems.map(f=>`<div class="fame-card"><div class="fame-avatar">${getInitials(f.name)}</div><div><div class="fame-name">${f.name}</div><div class="fame-cert">${f.cert}</div><div class="fame-pts">+${f.pts} pts</div></div></div>`).join(''):'<div class="empty">本月尚無新增證照</div>';
-
-  let rank=1;
-  document.getElementById('lb-list').innerHTML=sorted.slice(0,10).map((u,i)=>{
-    if(i>0&&sorted[i-1].pts!==u.pts)rank=i+1;
-    const pct=Math.round(u.pts/top*100),cls=rank===1?'r1':rank===2?'r2':rank===3?'r3':'';
-    const rkLabel=rank<=3?medals[rank-1]:rank,rkCls=rank<=3?'g':'';
-    return`<div class="lb-row ${cls}"><div class="lb-rk ${rkCls}">${rkLabel}</div><div><div class="lb-nm">${u.name}</div></div><div class="lb-rg">${u.region||'—'}</div><div><div class="bar-w"><div class="bar-f" style="width:${pct}%"></div></div></div><div class="lb-pt">${u.pts}</div></div>`;
-  }).join('')||'<div class="empty">尚未有資料</div>';
-
-  renderPie(users);
-
-  const entries=Object.values(users).filter(u=>u.expStory);
-  document.getElementById('wall-list').innerHTML=entries.length?entries.map(u=>`<div class="wc"><div class="wc-top"><div><div class="wc-nm">${u.name}</div><div class="wc-rg">${u.region||'—'}</div></div><div class="wc-ct">${u.expCert||'—'}</div></div><div class="wc-body">${u.expStory}</div>${u.expRes?`<div class="wc-res"><div class="wc-res-label">${u.name} 覺得幫助最大的資源</div>${u.expRes}</div>`:''}</div>`).join(''):'<div class="empty">尚未有心得分享</div>';
-
-  const awards=data.special_awards||[];
-  function spCard(icon,title,usd,cond,max,type){
-    const winners=awards.filter(r=>{const t=(r.AwardType||r.awardtype||'').toLowerCase();return type==='allstar'?(t.includes('all')||t.includes('全')):(t.includes('ai')||t.includes('enthusiast'));});
-    const used=winners.length,left=max-used,pct=Math.round(used/max*100);
-    const bc=left===0?'full':left===1?'low':'',lc=left===0?'full':left===1?'low':'ok';
-    const wHtml=winners.length?winners.map(w=>{const ok=(w.Status||w.status||'').includes('核准')||(w.Status||w.status||'').toLowerCase().includes('approved');return`<div class="wr"><div class="wr-nm">${w.EmployeeName||w.Title||'—'}</div><span class="wpill ${ok?'wok':'wpend'}">${ok?'核准':'待審核'}</span></div>`;}).join(''):'<div class="empty">尚未有申請者</div>';
-    return`<div class="sp-card"><div class="sp-head"><div><div class="sp-title">${icon} ${title}</div><div class="sp-usd">${usd}</div></div><div class="qleft ${lc}">${left===0?'額滿':'剩餘 '+left+' 名額'}</div></div><div class="sp-cond">${cond}</div><div class="quota-row"><div class="qbar-w"><div class="qbar ${bc}" style="width:${pct}%"></div></div><span style="font-size:12px;color:#888">${used}/${max}</span></div>${wHtml}</div>`;
-  }
-  document.getElementById('sp-grid').innerHTML=spCard('🌟','All-Star Award','USD 200','Foundational + Associate + Pro/Spec 各 1 張',3,'allstar')+spCard('🤖','AI-Enthusiast Award','USD 50','AI Practitioner + Generative AI Developer',5,'ai');
-}
-
-async function loadData(){
-  document.getElementById('upd-ts').textContent='更新中...';
-  try{
-    const res=await fetch(GITHUB_URL+'?t='+Date.now());
-    if(!res.ok)throw new Error('HTTP '+res.status);
-    const data=await res.json();
-    renderAll(data);
-    document.getElementById('upd-ts').textContent='更新: '+new Date().toLocaleDateString('zh-TW')+' '+new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});
-  }catch(e){
-    document.getElementById('upd-ts').textContent='載入失敗，請點更新重試';
-    document.getElementById('lb-list').innerHTML='<div class="empty">無法載入資料</div>';
-  }
-}
-
-
-// ── i18n ──
-const LANG = {
-  zh: {
-    title: 'AWS Certification Gamification 2026 H2',
-    subtitle: '公開看板 · 賽季期間 2026/07/22 – 2026/12/31',
-    refresh: '更新資料',
-    active: '進行中',
-    formTitle: '表單快速入口',
-    vcTitle: '剩餘考試券',
-    vcLock: '考試券資訊（管理員專用，點此解鎖）',
-    editBtn: '編輯數量',
-    editDone: '完成',
-    fameTitle: '本月名人榜',
-    fameEmpty: '本月尚無新增證照',
-    lbTitle: '積分榜',
-    lbRank: '名次', lbName: '員工', lbRegion: '國家', lbProg: '進度', lbPts: '積分',
-    lbEmpty: '尚未有資料',
-    pieTitle: '各 Region 證照數',
-    wallTitle: '心得牆',
-    wallEmpty: '尚未有心得分享',
-    wallRes: (name) => `${name} 覺得幫助最大的資源`,
-    spTitle: 'Special Awards 剩餘名額',
-    spEmpty: '尚未有申請者',
-    spFull: '額滿', spLeft: (n) => `剩餘 ${n} 名額`,
-    spApproved: '核准', spPending: '待審核',
-    resTitle: '相關資源',
-    loading: '載入中...',
-    loadFail: '載入失敗，請點更新重試',
-    updated: (t) => `更新: ${t}`,
-    updating: '更新中...',
-    cdLabels: ['天','時','分','秒'],
-    cdPrefix: '距賽季結束剩 ',
-    pwTitle: '管理員驗證',
-    pwDesc: '請輸入管理員密碼以查看考試券狀態',
-    pwSubmit: '確認',
-    pwErr: '密碼錯誤，請重試',
-    vcSuffix: ' 張剩餘',
-    vcEmpty: '已發完',
-    vcTotal: ' / 共 ',
-    vcUnit: ' 張',
-  },
-  en: {
-    title: 'AWS Certification Gamification 2026 H2',
-    subtitle: 'Public Dashboard · Season 2026/07/22 – 2026/12/31',
-    refresh: 'Refresh',
-    active: 'Active',
-    formTitle: 'Quick Links',
-    vcTitle: 'Remaining Vouchers',
-    vcLock: 'Voucher Info (Admin only — click to unlock)',
-    editBtn: 'Edit',
-    editDone: 'Done',
-    fameTitle: "This Month's Stars",
-    fameEmpty: 'No new certs this month',
-    lbTitle: 'Leaderboard',
-    lbRank: 'Rank', lbName: 'Name', lbRegion: 'Region', lbProg: 'Progress', lbPts: 'Pts',
-    lbEmpty: 'No data yet',
-    pieTitle: 'Certs by Region',
-    wallTitle: 'Experience Wall',
-    wallEmpty: 'No experience shared yet',
-    wallRes: (name) => `${name}'s most helpful resource`,
-    spTitle: 'Special Awards — Remaining Slots',
-    spEmpty: 'No applicants yet',
-    spFull: 'Full', spLeft: (n) => `${n} slot${n>1?'s':''} left`,
-    spApproved: 'Approved', spPending: 'Pending',
-    resTitle: 'Resources',
-    loading: 'Loading...',
-    loadFail: 'Load failed, please retry',
-    updated: (t) => `Updated: ${t}`,
-    updating: 'Updating...',
-    cdLabels: ['Days','Hrs','Min','Sec'],
-    cdPrefix: '',
-    pwTitle: 'Admin Verification',
-    pwDesc: 'Enter the admin password to view voucher status',
-    pwSubmit: 'Confirm',
-    pwErr: 'Wrong password, please try again',
-    vcSuffix: ' remaining',
-    vcEmpty: 'All issued',
-    vcTotal: ' / ',
-    vcUnit: ' total',
-  }
-};
-
-let currentLang = 'zh';
-
-function setLang(lang){
-  currentLang = lang;
-  document.getElementById('btn-zh').classList.toggle('active', lang==='zh');
-  document.getElementById('btn-en').classList.toggle('active', lang==='en');
-  applyLang();
-  if(lastData) renderAll(lastData);
-}
-
-function t(key, ...args){
-  const val = LANG[currentLang][key];
-  return typeof val === 'function' ? val(...args) : val;
-}
-
-function applyLang(){
-  const L = LANG[currentLang];
-  document.querySelector('.topbar h2').textContent = L.title;
-  document.querySelector('.topbar p').textContent = L.subtitle;
-  document.getElementById('refresh-btn').innerHTML = `<i class="ti ti-refresh"></i> ${L.refresh}`;
-  document.querySelector('.badge').textContent = L.active;
-  document.getElementById('pw-title').textContent = L.pwTitle;
-  document.getElementById('pw-desc').textContent = L.pwDesc;
-  document.getElementById('pw-submit-btn').textContent = L.pwSubmit;
-  document.getElementById('pw-err').textContent = L.pwErr;
-  document.getElementById('vc-lock-text').textContent = L.vcLock;
-  if(document.getElementById('edit-toggle-btn'))
-    document.getElementById('edit-toggle-btn').textContent = editMode ? L.editDone : L.editBtn;
-  renderVouchers();
-}
-
-function renderVouchersLocalized(){
-  const L = LANG[currentLang];
-  document.getElementById('vc-grid').innerHTML = VOUCHERS.map((v,i)=>{
-    const c=vcColor(v.remaining,v.total), pct=Math.round(v.remaining/v.total*100);
-    const label = v.remaining===0 ? L.vcEmpty : v.remaining + L.vcSuffix;
-    const total = L.vcTotal + v.total + L.vcUnit;
-    return`<div class="vc"><div class="vc-level">${v.level}</div><div class="vc-num ${c}">${v.remaining}</div><div class="vc-sub">${label}${total}</div><div class="vc-bar-w"><div class="vc-bar ${c}" style="width:${pct}%"></div></div><div class="vc-edit${editMode?' show':''}" id="vc-edit-${i}"><input type="number" min="0" max="${v.total}" value="${v.remaining}" id="vc-inp-${i}"><button onclick="saveVoucher(${i})">${L.editDone}</button></div></div>`;
-  }).join('');
-}
-
-// Override renderVouchers
-const _origRenderVouchers = renderVouchers;
-window.renderVouchers = renderVouchersLocalized;
-
-// Password
-const ADMIN_PW = 'awsbu2026';
-let adminUnlocked = false;
-
-function checkPw(){
-  const val = document.getElementById('pw-input').value;
-  if(val === ADMIN_PW){
-    adminUnlocked = true;
-    document.getElementById('pw-overlay').style.display='none';
-    document.getElementById('vc-section').style.display='block';
-    document.getElementById('vc-locked').style.display='none';
-    renderVouchers();
-  } else {
-    document.getElementById('pw-err').style.display='block';
-    document.getElementById('pw-input').value='';
-  }
-}
-
-let lastData = null;
-const _origRenderAll = renderAll;
-window.renderAll = function(data){
-  lastData = data;
-  _origRenderAll(data);
-};
-
-// Countdown with i18n
-function updateCDLocalized(){
-  const now=new Date(),diff=END-now;
-  const L=LANG[currentLang];
-  if(diff<=0){document.getElementById('cd').innerHTML=`<div class="cd-box"><div class="cd-num">0</div><div class="cd-lbl">${L.cdLabels[0]}</div></div>`;return;}
-  const vals=[Math.floor(diff/864e5),Math.floor((diff%864e5)/36e5),Math.floor((diff%36e5)/6e4),Math.floor((diff%6e4)/1e3)];
-  document.getElementById('cd').innerHTML=vals.map((v,i)=>`<div class="cd-box"><div class="cd-num">${v}</div><div class="cd-lbl">${L.cdPrefix}${L.cdLabels[i]}</div></div>`).join('');
-}
-clearInterval(window._cdInterval);
-window._cdInterval = setInterval(updateCDLocalized,1000);
-updateCDLocalized();
+  updateCDLocalized();
 
 renderVouchers();
 loadData();
