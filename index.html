@@ -109,6 +109,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .wok{background:var(--bg-success);color:var(--text-success)}.wpend{background:var(--bg-warning);color:var(--text-warning)}
 .empty{font-size:13px;color:var(--text-muted);padding:4px 0}
 @media(max-width:600px){.lb-wrap{grid-template-columns:1fr}.pie-wrap{display:none}}
+
+/* lang switcher */
+.lang-btn{font-size:12px;padding:4px 10px;border-radius:var(--radius);border:0.5px solid var(--border-strong);background:var(--surface-2);color:var(--text-primary);cursor:pointer;font-weight:500}
+.lang-btn.active{background:var(--fill-accent);color:#fff;border-color:var(--fill-accent)}
+/* password modal */
+.pw-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:999;display:flex;align-items:center;justify-content:center}
+.pw-box{background:#fff;border-radius:12px;padding:1.5rem 2rem;min-width:280px;text-align:center}
+.pw-box h3{font-size:16px;font-weight:500;margin-bottom:8px}
+.pw-box p{font-size:13px;color:var(--text-muted);margin-bottom:16px}
+.pw-input{width:100%;font-size:14px;padding:8px 12px;border-radius:var(--radius);border:0.5px solid var(--border-strong);margin-bottom:10px}
+.pw-submit{width:100%;font-size:14px;padding:8px;border-radius:var(--radius);border:none;background:var(--fill-accent);color:#fff;cursor:pointer;font-weight:500}
+.pw-err{font-size:12px;color:var(--text-danger);margin-top:6px;display:none}
+.admin-only{display:none}
 </style>
 </head>
 <body>
@@ -121,7 +134,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
     <span class="badge">進行中</span>
-    <button class="btn" onclick="loadData()"><i class="ti ti-refresh"></i> 更新資料</button>
+    <button class="lang-btn active" id="btn-zh" onclick="setLang('zh')">中文</button>
+    <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+    <button class="btn" id="refresh-btn" onclick="loadData()"><i class="ti ti-refresh"></i> 更新資料</button>
     <span class="ts" id="upd-ts">載入中...</span>
   </div>
 </div>
@@ -154,12 +169,32 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 </div>
 
+<!-- password modal -->
+<div class="pw-overlay" id="pw-overlay" style="display:none">
+  <div class="pw-box">
+    <h3 id="pw-title">管理員驗證</h3>
+    <p id="pw-desc">請輸入管理員密碼以查看考試券狀態</p>
+    <input class="pw-input" type="password" id="pw-input" placeholder="密碼" onkeydown="if(event.key==='Enter')checkPw()">
+    <button class="pw-submit" onclick="checkPw()" id="pw-submit-btn">確認</button>
+    <div class="pw-err" id="pw-err">密碼錯誤，請重試</div>
+  </div>
+</div>
+
+<div class="admin-only" id="vc-section">
 <div class="sec">
   <div class="sec-t">
-    <div class="sec-t-left"><i class="ti ti-ticket"></i> 剩餘考試券</div>
-    <button class="edit-toggle" onclick="toggleEdit()" id="edit-toggle-btn">編輯數量</button>
+    <div class="sec-t-left"><i class="ti ti-ticket"></i> <span data-zh="剩餘考試券" data-en="Remaining Vouchers">剩餘考試券</span></div>
+    <button class="edit-toggle" onclick="toggleEdit()" id="edit-toggle-btn" data-zh="編輯數量" data-en="Edit">編輯數量</button>
   </div>
   <div class="vc-grid" id="vc-grid"></div>
+</div>
+</div>
+
+<div class="sec" id="vc-locked" style="cursor:pointer" onclick="document.getElementById('pw-overlay').style.display='flex'">
+  <div style="display:flex;align-items:center;gap:10px;color:var(--text-muted)">
+    <i class="ti ti-lock" style="font-size:18px"></i>
+    <span id="vc-lock-text" data-zh="考試券資訊（管理員專用，點此解鎖）" data-en="Voucher Info (Admin only — click to unlock)">考試券資訊（管理員專用，點此解鎖）</span>
+  </div>
 </div>
 
 <div class="sec">
@@ -365,6 +400,171 @@ async function loadData(){
     document.getElementById('lb-list').innerHTML='<div class="empty">無法載入資料</div>';
   }
 }
+
+
+// ── i18n ──
+const LANG = {
+  zh: {
+    title: 'AWS Certification Gamification 2026 H2',
+    subtitle: '公開看板 · 賽季期間 2026/07/22 – 2026/12/31',
+    refresh: '更新資料',
+    active: '進行中',
+    formTitle: '表單快速入口',
+    vcTitle: '剩餘考試券',
+    vcLock: '考試券資訊（管理員專用，點此解鎖）',
+    editBtn: '編輯數量',
+    editDone: '完成',
+    fameTitle: '本月名人榜',
+    fameEmpty: '本月尚無新增證照',
+    lbTitle: '積分榜',
+    lbRank: '名次', lbName: '員工', lbRegion: '國家', lbProg: '進度', lbPts: '積分',
+    lbEmpty: '尚未有資料',
+    pieTitle: '各 Region 證照數',
+    wallTitle: '心得牆',
+    wallEmpty: '尚未有心得分享',
+    wallRes: (name) => `${name} 覺得幫助最大的資源`,
+    spTitle: 'Special Awards 剩餘名額',
+    spEmpty: '尚未有申請者',
+    spFull: '額滿', spLeft: (n) => `剩餘 ${n} 名額`,
+    spApproved: '核准', spPending: '待審核',
+    resTitle: '相關資源',
+    loading: '載入中...',
+    loadFail: '載入失敗，請點更新重試',
+    updated: (t) => `更新: ${t}`,
+    updating: '更新中...',
+    cdLabels: ['天','時','分','秒'],
+    cdPrefix: '距賽季結束剩 ',
+    pwTitle: '管理員驗證',
+    pwDesc: '請輸入管理員密碼以查看考試券狀態',
+    pwSubmit: '確認',
+    pwErr: '密碼錯誤，請重試',
+    vcSuffix: ' 張剩餘',
+    vcEmpty: '已發完',
+    vcTotal: ' / 共 ',
+    vcUnit: ' 張',
+  },
+  en: {
+    title: 'AWS Certification Gamification 2026 H2',
+    subtitle: 'Public Dashboard · Season 2026/07/22 – 2026/12/31',
+    refresh: 'Refresh',
+    active: 'Active',
+    formTitle: 'Quick Links',
+    vcTitle: 'Remaining Vouchers',
+    vcLock: 'Voucher Info (Admin only — click to unlock)',
+    editBtn: 'Edit',
+    editDone: 'Done',
+    fameTitle: "This Month's Stars",
+    fameEmpty: 'No new certs this month',
+    lbTitle: 'Leaderboard',
+    lbRank: 'Rank', lbName: 'Name', lbRegion: 'Region', lbProg: 'Progress', lbPts: 'Pts',
+    lbEmpty: 'No data yet',
+    pieTitle: 'Certs by Region',
+    wallTitle: 'Experience Wall',
+    wallEmpty: 'No experience shared yet',
+    wallRes: (name) => `${name}'s most helpful resource`,
+    spTitle: 'Special Awards — Remaining Slots',
+    spEmpty: 'No applicants yet',
+    spFull: 'Full', spLeft: (n) => `${n} slot${n>1?'s':''} left`,
+    spApproved: 'Approved', spPending: 'Pending',
+    resTitle: 'Resources',
+    loading: 'Loading...',
+    loadFail: 'Load failed, please retry',
+    updated: (t) => `Updated: ${t}`,
+    updating: 'Updating...',
+    cdLabels: ['Days','Hrs','Min','Sec'],
+    cdPrefix: '',
+    pwTitle: 'Admin Verification',
+    pwDesc: 'Enter the admin password to view voucher status',
+    pwSubmit: 'Confirm',
+    pwErr: 'Wrong password, please try again',
+    vcSuffix: ' remaining',
+    vcEmpty: 'All issued',
+    vcTotal: ' / ',
+    vcUnit: ' total',
+  }
+};
+
+let currentLang = 'zh';
+
+function setLang(lang){
+  currentLang = lang;
+  document.getElementById('btn-zh').classList.toggle('active', lang==='zh');
+  document.getElementById('btn-en').classList.toggle('active', lang==='en');
+  applyLang();
+  if(lastData) renderAll(lastData);
+}
+
+function t(key, ...args){
+  const val = LANG[currentLang][key];
+  return typeof val === 'function' ? val(...args) : val;
+}
+
+function applyLang(){
+  const L = LANG[currentLang];
+  document.querySelector('.topbar h2').textContent = L.title;
+  document.querySelector('.topbar p').textContent = L.subtitle;
+  document.getElementById('refresh-btn').innerHTML = `<i class="ti ti-refresh"></i> ${L.refresh}`;
+  document.querySelector('.badge').textContent = L.active;
+  document.getElementById('pw-title').textContent = L.pwTitle;
+  document.getElementById('pw-desc').textContent = L.pwDesc;
+  document.getElementById('pw-submit-btn').textContent = L.pwSubmit;
+  document.getElementById('pw-err').textContent = L.pwErr;
+  document.getElementById('vc-lock-text').textContent = L.vcLock;
+  if(document.getElementById('edit-toggle-btn'))
+    document.getElementById('edit-toggle-btn').textContent = editMode ? L.editDone : L.editBtn;
+  renderVouchers();
+}
+
+function renderVouchersLocalized(){
+  const L = LANG[currentLang];
+  document.getElementById('vc-grid').innerHTML = VOUCHERS.map((v,i)=>{
+    const c=vcColor(v.remaining,v.total), pct=Math.round(v.remaining/v.total*100);
+    const label = v.remaining===0 ? L.vcEmpty : v.remaining + L.vcSuffix;
+    const total = L.vcTotal + v.total + L.vcUnit;
+    return`<div class="vc"><div class="vc-level">${v.level}</div><div class="vc-num ${c}">${v.remaining}</div><div class="vc-sub">${label}${total}</div><div class="vc-bar-w"><div class="vc-bar ${c}" style="width:${pct}%"></div></div><div class="vc-edit${editMode?' show':''}" id="vc-edit-${i}"><input type="number" min="0" max="${v.total}" value="${v.remaining}" id="vc-inp-${i}"><button onclick="saveVoucher(${i})">${L.editDone}</button></div></div>`;
+  }).join('');
+}
+
+// Override renderVouchers
+const _origRenderVouchers = renderVouchers;
+window.renderVouchers = renderVouchersLocalized;
+
+// Password
+const ADMIN_PW = 'awsbu2026';
+let adminUnlocked = false;
+
+function checkPw(){
+  const val = document.getElementById('pw-input').value;
+  if(val === ADMIN_PW){
+    adminUnlocked = true;
+    document.getElementById('pw-overlay').style.display='none';
+    document.getElementById('vc-section').style.display='block';
+    document.getElementById('vc-locked').style.display='none';
+    renderVouchers();
+  } else {
+    document.getElementById('pw-err').style.display='block';
+    document.getElementById('pw-input').value='';
+  }
+}
+
+let lastData = null;
+const _origRenderAll = renderAll;
+window.renderAll = function(data){
+  lastData = data;
+  _origRenderAll(data);
+};
+
+// Countdown with i18n
+function updateCDLocalized(){
+  const now=new Date(),diff=END-now;
+  const L=LANG[currentLang];
+  if(diff<=0){document.getElementById('cd').innerHTML=`<div class="cd-box"><div class="cd-num">0</div><div class="cd-lbl">${L.cdLabels[0]}</div></div>`;return;}
+  const vals=[Math.floor(diff/864e5),Math.floor((diff%864e5)/36e5),Math.floor((diff%36e5)/6e4),Math.floor((diff%6e4)/1e3)];
+  document.getElementById('cd').innerHTML=vals.map((v,i)=>`<div class="cd-box"><div class="cd-num">${v}</div><div class="cd-lbl">${L.cdPrefix}${L.cdLabels[i]}</div></div>`).join('');
+}
+clearInterval(window._cdInterval);
+window._cdInterval = setInterval(updateCDLocalized,1000);
+updateCDLocalized();
 
 renderVouchers();
 loadData();
